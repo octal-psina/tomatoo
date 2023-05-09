@@ -21,13 +21,16 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-  option_list = ['Tv series','Movie in theatr','Movie at home']
+  
   if message.text == 'New request':
     await message.answer(text='Chose the type of show', reply_markup=kboard.OPTIONS)
-  elif message.text in option_list:
+  elif message.text in kboard.option_list:
     await message.answer(text='Chose new or popular', reply_markup = kboard.FILTER)
-  elif message.text == 'New':
-    await message.answer(text='Chose new or popular', reply_markup = kboard.GENRE_ROW)
+  elif message.text in kboard.filter_list:
+    await message.answer(text='Chose genre wich you interest in', reply_markup = kboard.GENRE_ROW)
+  elif message.text.lower() in kboard.genre_list:
+    await message.answer(text='Nice you done it',)
+    # old style:
     # old style:
     # await bot.send_message(message.chat.id, message.text)
   #await message.answer(message.text)
