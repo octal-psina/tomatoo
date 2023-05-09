@@ -7,10 +7,12 @@ NEW_REQUEST = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEW_REQUEST)
 BTN_TV_SHOWS = KeyboardButton('Tv series',callback_data='series')
 BTN_THEATR = KeyboardButton('Movie in theatr', callback_data='theatr')
 BTN_HOME = KeyboardButton('Movie at home', callback_data='home')
+option_list = ['Tv series','Movie in theatr','Movie at home']
 OPTIONS = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_TV_SHOWS, BTN_THEATR, BTN_HOME)
 
 BTN_NEW = KeyboardButton('New',callback_data='new')
 BTN_POPULAR = KeyboardButton('Popular', callback_data='popular')
+filter_list = ["New","Popular"]
 FILTER = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEW, BTN_POPULAR)
 
 BTN_GENRE_ACTION = KeyboardButton('Action', callback_data='action')
@@ -26,6 +28,7 @@ BTN_GENRE_HORROR = KeyboardButton('Horror', callback_data='horror')
 BTN_GENRE_MUSIC = KeyboardButton('Music', callback_data='music')
 BTN_GENRE_SCI_FI = KeyboardButton('Sci_fi', callback_data='sci_fi')
 BTN_GENRE_WESTERN = KeyboardButton('Western', callback_data='western')
+genre_list=['action', 'adventure', 'animation', 'comedy', 'crime', 'documentary', 'drama', 'lgbtq','horror','music','romance','sci_fi','western', 'mystery_and_thriller', 'fantasy']
 
 GENRE_ROW = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_GENRE_ACTION,BTN_GENRE_ADVENTURE,BTN_GENRE_ANIMATION,BTN_GENRE_COMEDY,BTN_GENRE_ROMANCE,BTN_GENRE_CRIME,BTN_GENRE_DOCUMENTARY,BTN_GENRE_DRAMA,BTN_GENRE_LGBTQ,BTN_GENRE_HORROR,BTN_GENRE_MUSIC,BTN_GENRE_SCI_FI,BTN_GENRE_WESTERN)
 
