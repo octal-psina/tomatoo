@@ -2,7 +2,7 @@ import base64
 from os import walk
 import requests
 from bs4 import BeautifulSoup
-import lxml
+#import lxml
 import json
 
 
@@ -31,91 +31,111 @@ class Napi_tomatto:
     def link_creator(self, user_choose_category, user_choose_sort_type, user_choose_genre):
         '''create link add filters from user request'''
         # use characters just to format string
-        for genre in self.genres:
-            print(genre)
+        print(user_choose_category,user_choose_sort_type, user_choose_genre)
+        #for genre in self.genres:
+            #print(genre)
         # Category
-        if user_choose_category.lower() == 'series':
+        
+        
+      
+        if user_choose_category == 'tv series':
             a, b, c = self.tv_series, self.audience_rait, self.criic_rait
-        elif user_choose_category.lower() == 'at home':
+        
+      
+        elif user_choose_category == 'movie at home':
             a, b, c = self.movie_home, self.audience_rait, self.criic_rait
-        elif user_choose_category.lower() == 'in theaters':
+        
+        elif user_choose_category == 'movie in theater':
             a, b, c = self.movi_theater, self.audience_rait, self.criic_rait
+        
         # Genere
-        if user_choose_genre in self.genres:
+        if user_choose_genre.lower() in self.genres:
             f = f'~genres:{self.genres[self.genres.index(user_choose_genre)]}'
         # Sort type
         if user_choose_sort_type.lower() == 'popular':
             d = self.pop_shows
         elif user_choose_sort_type.lower() == 'new':
             d = self.new_shows
-        elif user_choose_sort_type.lower() == 'no filter':
-            d = ""
-        link = 'https://www.rottentomatoes.com/napi/browse/{0}/{1}{2}{3}{4}?'.format(
-            a, b, c, f, d)
-        print(link)
-        # return link
-        self.url = link
+        #elif user_choose_sort_type.lower() == 'no filter':
+            #d = ""
+        link = 'https://www.rottentomatoes.com/napi/browse/{0}/{1}{2}{3}{4}?'.format( a, b, c, f, d)
+        #print(link)
+        
+        return link
+        
 
-    def napi_appeal(self):
-        '''method pars json from request'''
+    def napi_appeal(self,): #source
+        '''method pars json from source'''
         # This code to get API acsess
-        url = self.url
+        #url = source
         #url = Napi_tomatto.link_creator(self)
-        response = requests.request("GET", url, headers=self.headers)
-        data = response.json()
+        #use url
+        #response = requests.request("GET", source, headers=self.headers)
+        #data = response.json()
 
-        # with open('hey.json', 'w') as file:
-        #    json.dump(a,file, indent=4)
+        #with open('hey.json', 'w') as file:
+        #    json.dump(data1,file, indent=4)
         #file = open("save.json")
 
-        # with open('hey.json','r') as file:
-        #    data = json.load(file)
+        #use json
+        with open('hey.json','r') as file:
+          data = json.load(file)
 
         # print(data['grid']['list'][30])
-        print(len(data['grid']['list']))
+        #print(len(data['grid']['list']))
         movies_list = data['grid']['list']
-
+        movie_info =""
+        
+        list_of_output=[]
         counter = 0
         for movie in movies_list:
+            list_movie_info=[]
             counter += 1
             try:
                 audiece_r = f"Audience score: {data['grid']['list'][movies_list.index(movie)]['audienceScore']['score']}"
-                print(audiece_r)
+                #print(audiece_r)
+                list_movie_info.append("\n"+audiece_r)
             except(KeyError):
                 pass
             try:
                 critics_r = f"Critic score: {data['grid']['list'][movies_list.index(movie)]['criticsScore']['score']}"
-                print(critics_r)
+                #print(critics_r)
+                list_movie_info.append("\n"+critics_r)
             except(KeyError):
                 pass
             try:
                 tomato_url = f"Url: {data['grid']['list'][movies_list.index(movie)]['mediaUrl']}"
-                print(tomato_url)
+                #print(tomato_url)
+                list_movie_info.append("\n"+tomato_url)
             except(KeyError):
                 pass
             try:
                 poster_url = f"Poster: {data['grid']['list'][movies_list.index(movie)]['posterUri']}"
-                print(poster_url)
+                list_movie_info.append("\n"+poster_url)
             except(KeyError):
                 pass
             try:
                 relese_data = data['grid']['list'][movies_list.index(
                     movie)]['releaseDateText']
-                print(relese_data)
+                #print(relese_data)
+                list_movie_info.append("\n"+relese_data)
             except(KeyError):
                 pass
             try:
                 movie_name = f"Title: {data['grid']['list'][movies_list.index(movie)]['title']}"
-                print(movie_name)
+                #print(movie_name)
+                list_movie_info.append("\n"+movie_name)
             except(KeyError):
                 pass
-            print(f"{10*'='}{counter}{10*'='}\n")
+            list_movie_info.append("\n"+f"{10*'='}{counter}{10*'='}\n")
+            list_of_output.append(list_movie_info)
         try:
             has_next_page = data['pageInfo']['hasNextPage']
             print(has_next_page)
         except(KeyError):
             print("There is no page to open")
-        Napi_tomatto.link_povider(self, url, has_next_page)
+        return list_of_output
+       # Napi_tomatto.link_povider(self, url, has_next_page)
 
     def link_povider(self, url, next_page):
         '''Get url and information about existing next page'''
@@ -131,39 +151,42 @@ class Napi_tomatto:
             self.next_page = False
             #print("There is no page to open")
 
-    def get_next_page(self):
+    def get_next_page(self, source):
         '''Create next page link'''
-        if self.next_page == True:
+        #if self.next_page == True:
             #url = Napi_tomatto.link_creator(self)
-            url = self.url
-            if 'after=' in url:
-                part = url[url.find("=") + 1:]
-                cut_url = url.partition("=")[0] + "="
-                part_bytes = part.encode('ascii')
-                part_base64 = base64.b64decode(part_bytes)
-                part_number = part_base64.decode("ascii")
-                new_number = str(int(part_number) + 30)
-                new_number_bytes = new_number.encode('ascii')
-                new_number_base64 = base64.b64encode(new_number_bytes)
-                link = cut_url + new_number_base64.decode('ascii')
-            elif 'after=' not in url:
-                link = url + 'after='
-                number = '29'
-                number_bytes = number.encode('ascii')
-                number_base64 = base64.b64encode(number_bytes)
-                link += number_base64.decode("ascii")
-            print(link)
-            self.url = link
-        elif self.next_page == False:
-            print('There is no page to open.')
+        url = source 
+        if 'after=' in url:
+            part = url[url.find("=") + 1:]
+            cut_url = url.partition("=")[0] + "="
+            part_bytes = part.encode('ascii')
+            part_base64 = base64.b64decode(part_bytes)
+            part_number = part_base64.decode("ascii")
+            new_number = str(int(part_number) + 30)
+            new_number_bytes = new_number.encode('ascii')
+            new_number_base64 = base64.b64encode(new_number_bytes)
+            link = cut_url + new_number_base64.decode('ascii')
+        elif 'after=' not in url:
+            link = url + 'after='
+            number = '29'
+            number_bytes = number.encode('ascii')
+            number_base64 = base64.b64encode(number_bytes)
+            link += number_base64.decode("ascii")
+        return link 
 
+#n = Napi_tomatto()
+#appeal=n.napi_appeal()
+#for film in appeal:
+#    for f in film:
+#        print(f)
+#print(appeal)
 '''
-n = Napi_tomatto()
 user_choose_category = input('tv series/at home/in theaters: ')
 user_choose_sort_type = input('popular/new/no filter: ')
 user_choose_genre = input('plese choose genre: ')
 
-n.link_creator(user_choose_category, user_choose_sort_type, user_choose_genre)
+print(n.link_creator(user_choose_category, user_choose_sort_type, user_choose_genre))
+
 # n.link_creator()
 n.napi_appeal()
 
