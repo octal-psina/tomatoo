@@ -4,10 +4,17 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 BTN_NEW_REQUEST = KeyboardButton('New request', callback_data='new_request')
 NEW_REQUEST = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEW_REQUEST)
 
+BTN_CONFIRM = KeyboardButton('Confirm', callback_data='confirm')
+CONFIRM = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_CONFIRM)
+
+
+BTN_NEXT_PAGE = KeyboardButton('Next page', callback_data='next_page')
+NEXT_PAGE = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEXT_PAGE)
+
 BTN_TV_SHOWS = KeyboardButton('Tv series', callback_data='series')
-BTN_THEATR = KeyboardButton('Movie in theatr', callback_data='theatr')
+BTN_THEATR = KeyboardButton('Movie in theater', callback_data='theater')
 BTN_HOME = KeyboardButton('Movie at home', callback_data='home')
-option_list = ['Tv series', 'Movie in theatr', 'Movie at home']
+option_list = ['Tv series', 'Movie in theater', 'Movie at home']
 OPTIONS = ReplyKeyboardMarkup(resize_keyboard=True).add(
     BTN_TV_SHOWS, BTN_THEATR, BTN_HOME)
 
