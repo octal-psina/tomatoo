@@ -1,3 +1,4 @@
+from aiogram.dispatcher.filters import Text
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
@@ -21,13 +22,31 @@ class Form(StatesGroup):
     choose_sort_type = State()
     choose_genre = State()
     new_link = State()
+    gap = State()
     
 
 @dp.message_handler(commands=['start', 'help'])
 async def start_message(message: types.Message):
     """First launch comand"""
     await message.answer(text="Hi!\nI'm EchoBot!\nPowered by aiogram.", reply_markup=kboard.NEW_REQUEST)
-      
+
+
+@dp.message_handler(state='*', commands='cancel')
+@dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
+async def cancel_handler(message: types.Message, state: FSMContext):
+    """
+    Allow user to cancel any action
+    """
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    logging.info('Cancelling state %r', current_state)
+    # Cancel state and inform user about it
+    await state.finish()
+    # And remove keyboard (just in case)
+    await message.reply('Cancelled.', reply_markup=types.ReplyKeyboardRemove())
+
+
 @dp.message_handler(text='New request')
 async def start_new_request(message: types.Message, state: FSMContext):
     '''Start new request'''
@@ -89,6 +108,12 @@ async def get_choose_genre(message:
     user_data = await state.get_data()
     await message.reply(f"Nice u done it \n{user_data['choose_category']}\n\n{user_data['choose_sort_type']},\n{user_data['choose_genre']}\nuser_data['new_link']", reply_markup=kboard.CONFIRM)
     await state.set_state(Form.new_link.state)
+
+
+@dp.message_handler(lambda message: message.text not in ['Confirm','Next page'], state=Form.new_link)
+async def process_age_invalid(message: types.Message):
+    return await message.reply("I dont't know what to do!")
+    
 
 @dp.message_handler(text='Confirm', state=Form.new_link)
 #@dp.message_handler(text="hey")
