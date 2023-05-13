@@ -1,15 +1,18 @@
 #from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
+BTN_CANCEL= KeyboardButton('Cancel', callback_data='Cancel')
+
+#HELP = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_WEATHER, BTN_WIND).add(BTN_SUN_TIME)
 BTN_NEW_REQUEST = KeyboardButton('New request', callback_data='new_request')
 NEW_REQUEST = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEW_REQUEST)
 
 BTN_CONFIRM = KeyboardButton('Confirm', callback_data='confirm')
-CONFIRM = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_CONFIRM)
+CONFIRM = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_CONFIRM).add(BTN_CANCEL)
 
 
 BTN_NEXT_PAGE = KeyboardButton('Next page', callback_data='next_page')
-NEXT_PAGE = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEXT_PAGE)
+NEXT_PAGE = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEXT_PAGE).add(BTN_CANCEL)
 
 BTN_TV_SHOWS = KeyboardButton('Tv series', callback_data='series')
 BTN_THEATR = KeyboardButton('Movie in theater', callback_data='theater')
@@ -43,7 +46,3 @@ genre_list = ['action', 'adventure', 'animation', 'comedy', 'crime', 'documentar
 GENRE_ROW = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_GENRE_ACTION, BTN_GENRE_ADVENTURE, BTN_GENRE_ANIMATION, BTN_GENRE_COMEDY, BTN_GENRE_ROMANCE,
                                                           BTN_GENRE_CRIME, BTN_GENRE_DOCUMENTARY, BTN_GENRE_DRAMA, BTN_GENRE_LGBTQ, BTN_GENRE_HORROR, BTN_GENRE_MUSIC, BTN_GENRE_SCI_FI, BTN_GENRE_WESTERN)
 
-#BTN_NEXT_PAGE = KeyboardButton('Next page', callback_data='next_page')
-#NEXT_PAGE = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_NEXT_PAGE)
-
-#HELP = ReplyKeyboardMarkup(resize_keyboard=True).add(BTN_WEATHER, BTN_WIND).add(BTN_SUN_TIME)
