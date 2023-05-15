@@ -16,11 +16,13 @@ class Napi_tomatto:
         # raiting
         self.audience_rait = 'audience:upright'
         self.criic_rait = '~critics:fresh'
+        # genres info may be extendet
         self.genres = ['action', 'adventure', 'animation', 'anime', 'biography', 'comedy', 'crime', 'documentary', 'drama', 'entertainment', 'faith_and_spirituality', 'fantasy', 'game_show', 'lgbtq', 'health_and_wellness', 'history', 'holiday', 'horror',
                        'house_and_garden', 'kids_and_family', 'music', 'musical', 'mystery_and_thriller', 'nature', 'news', 'reality', 'romance', 'sci_fi', 'short', 'soap', 'special_interest', 'sports', 'stand_up', 'talk_show', 'travel', 'variety', 'war', 'western']
         # sort type
         self.pop_shows = '~sort:popular'
         self.new_shows = '~sort:newest'
+        # random user agent choice just incase
         user_agents = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:112.0) Gecko/20100101 Firefox/112.0', 'Mozilla/5.0 (X11; Linux x86_64; rv:112.0) Gecko/20100101 Firefox/112.0', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 12_5_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15',
                        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/18.17763', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.69 Safari/537.36', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.10) Gecko/20100101 Firefox/102.10']
         self.headers = {
@@ -52,7 +54,6 @@ class Napi_tomatto:
         link = 'https://www.rottentomatoes.com/napi/browse/{0}/{1}{2}{3}{4}?'.format(
             a, b, c, f, d)
         # print(link)
-
         return link
 
     def napi_appeal(self, source):  # source
