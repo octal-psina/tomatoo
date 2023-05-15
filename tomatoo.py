@@ -1,13 +1,14 @@
-from aiogram.dispatcher.filters import Text
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
-from tomato_api import Napi_tomatto, walk
+from aiogram.dispatcher.filters import Text
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-import logging
 from aiogram import Bot, Dispatcher, executor, types
+import logging
+from tomato_api import Napi_tomatto, walk
 import config
 import keyboard_markup as kboard
+
 API_TOKEN = config.TOKEN
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,21 +17,18 @@ bot = Bot(token=API_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
-
 class Form(StatesGroup):
-
+    '''Class to save user choce information'''
     choose_category = State()
     choose_sort_type = State()
     choose_genre = State()
     new_link = State()
-    gap = State()
 
 
 @dp.message_handler(commands=['start', 'help'])
 async def start_message(message: types.Message):
     """First launch comand"""
     await message.answer(text="Hi!\nI can help you to choose tv show or movie.", reply_markup=kboard.NEW_REQUEST)
-
 
 @dp.message_handler(state='*', commands='cancel')
 @dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
@@ -69,23 +67,19 @@ async def get_choose_category(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Form.choose_sort_type.state)
 async def get_choose_sort_type(message: types.Message, state: FSMContext):
     '''Get user filter and await next filter'''
-
     if message.text not in kboard.filter_list:
         await message.answer(text='Wrong input please use key board')
         return
     await state.update_data(choose_sort_type=message.text)
     await message.answer('Data saved')
-#    await state.reset_state(with_data=False)
     await message.answer(text='Chose genre wich you interest in', reply_markup=kboard.GENRE_ROW)
     await state.set_state(Form.choose_genre.state)
-
 
 @dp.message_handler(state=Form.choose_genre.state)
 async def get_choose_genre(message:
                            types.Message, state: FSMContext):
     '''Save user_genre input and processing gathered data'''
     n = Napi_tomatto()
-
     if message.text.lower() not in kboard.genre_list:
         await message.answer(text='Wrong input please use key board')
         return
@@ -111,20 +105,15 @@ async def get_choose_genre(message:
     await message.reply(f"Ok let's check if is everything fine\nShow type: {user_data['choose_category']}\nFilter type: {user_data['choose_sort_type']}\nGenre: {user_data['choose_genre']}", reply_markup=kboard.CONFIRM)
     await state.set_state(Form.new_link.state)
 
-
 @dp.message_handler(lambda message: message.text not in ['Confirm', 'Next page'], state=Form.new_link)
 async def process_age_invalid(message: types.Message):
+    '''Exception handler 4 new_link'''
     return await message.reply("I dont't know what to do!")
 
-
 @dp.message_handler(text='Confirm', state=Form.new_link)
-#@dp.message_handler(text="hey")
 async def get_n_send_info(message: types.Message, state: FSMContext):
     '''Get json file from rotton tomatoes and send it to user'''
     n = Napi_tomatto()
-    # await state.set_state(Form.new_link.state)
-    # await state.update_data(new_link="pupa")
-    # await state.reset_state(with_data=False)
     user_data = await state.get_data()
     movies = n.napi_appeal(user_data['new_link'])  # user_data['new_link']
     for movie in movies[:-1]:
@@ -135,15 +124,12 @@ async def get_n_send_info(message: types.Message, state: FSMContext):
     elif movies[-1] == False:
         return await message.answer('Sorry, pages are over', reply_markup=kboard.CANCEL)
 
-    # await message.reply(f"Nice u done it \n{user_data['choose_category']}\n{user_data['choose_sort_type']},\n{user_data['choose_genre']}\n{user_data['new_link']}")
-
-
 @dp.message_handler(text='Next page', state=Form.new_link)
 async def get_next_page(message: types.Message, state: FSMContext):
+    '''Create new link using 64base code'''
     n = Napi_tomatto()
     user_data = await state.get_data()
     next_page_link = n.get_next_page(user_data['new_link'])
-
     await state.set_state(Form.new_link.state)
     # save output frome method link_creator()
     await state.update_data(new_link=next_page_link)
