@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+keys/
 draft/
 __pycache__/
 *.py[cod]
