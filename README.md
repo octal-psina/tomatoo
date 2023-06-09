@@ -3,9 +3,9 @@ This bot use website [Rotten Tomatoes](https://www.rottentomatoes.com/) to colle
 
 and send information about movies and TV shows according to sort filters.
 
-![image](https://github.com/octal-psina/tomatoo/blob/develope/screanshots/sreenshot_1.jpg)
+![image](https://github.com/octal-psina/tomatoo/blob/develope/screanshots/screenshot_1.jpg)
 
-![image](https://github.com/octal-psina/tomatoo/blob/develope/screanshots/sreenshot_2.jpg)
+![image](https://github.com/octal-psina/tomatoo/blob/develope/screanshots/screenshot_2.jpg)
 
 It's my learning project,the program was created for fun and educational purposes.
 
